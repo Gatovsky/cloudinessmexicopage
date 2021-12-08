@@ -1,0 +1,53 @@
+version: "3.9"
+
+services: 
+    nginx:
+        build: 
+            context: .
+            dockerfile: nginx.dockerfile
+            args: 
+                ARGUMENTO: "Esto es un prototipo. Testing mode on"
+        container_name: nginx_c1
+        restart: always
+        environment:
+            MYVAR: "Esto es un prototipo. Testing mode on MYVAR"
+        security_opt: 
+            - apparmor=docker-nginx
+        ports: 
+            - 8080:80
+        volumes: 
+            - ./html/:/usr/share/nginx/html:rw
+        depends_on: 
+            - database
+        networks: 
+            draft_network:
+                aliases: 
+                    - nginx_host
+  
+    database:
+        build: 
+            context: .
+            dockerfile: mysql.dockerfile
+        container_name: database_svc
+        restart: always
+        ports: 
+            - 3306:3306
+        environment: 
+            MYSQL_DATABASE: "custom_db"
+            MYSQL_ROOT_PASSWORD: "Custom.2021"
+        volumes: 
+            - ./schemas/:/var/lib/mysql
+        networks: 
+            draft_network:
+                aliases: 
+                    - database_host
+
+volumes: 
+    html: {}
+    schemas: {}
+networks: 
+    draft_network:
+        name: nginex_net
+        driver: bridge
+        ipam:
+            driver: default

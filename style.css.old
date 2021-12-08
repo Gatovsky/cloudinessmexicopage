@@ -1,0 +1,12 @@
+/* CSS files add styling rules to your content*/
+body{
+    margin: 0en;
+}
+
+/* cover es una clase en HTML (en CSS se indica con un .*/
+.cover {
+    height: 400px;
+    background-color: cadetblue;
+    color: white;
+    
+}
